@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 require('dotenv').config()
 const AuthRouter = require('./routes/AuthRouter')
 const database = require('./config/database')
@@ -6,8 +7,8 @@ const database = require('./config/database')
 const app = express()
 const env = process.env
 
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(AuthRouter)
 

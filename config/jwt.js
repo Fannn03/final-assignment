@@ -8,7 +8,8 @@ module.exports = (req, res, user) => {
 
     const payload = {
         username: user.username,
-        password: user.password
+        password: user.password,
+        level: user.level
     }
 
     jwt.sign(payload, env.SECRET_KEY, {expiresIn: '1h'}, (err, decoded) => {

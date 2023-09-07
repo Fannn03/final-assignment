@@ -1,4 +1,4 @@
-const logger = require("../config/logger")
+const logger = require("../logs/logger")
 const bcrypt = require('bcrypt')
 const UserSchema = require("../models/UserSchema")
 const jwt = require("../config/jwt")

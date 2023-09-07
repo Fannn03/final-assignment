@@ -19,6 +19,14 @@ const Schema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'password tidak boleh kosong'],
+    },
+    level: {
+        type: String,
+        required: [true, 'level tidak boleh kosong'],
+        enum : {
+            values: ['member', 'admin'],
+            message: `level harus berupa member atau admin`
+        }
     }
 })
 

@@ -1,14 +1,17 @@
 const logger = require("../config/logger")
+const bcrypt = require('bcrypt')
 const UserSchema = require("../models/UserSchema")
+const jwt = require("../config/jwt")
 
 module.exports = {
     register: async (req, res) => {
         
-        const {username, password} = req.body
+        const {username, password, level} = req.body
 
         const user =  new UserSchema({
             username: username,
-            password: password
+            password: password,
+            level: level.toLowerCase()
         })
 
         try {
@@ -53,6 +56,39 @@ module.exports = {
         })
 
         return logger(req, res, 'Berhasil mendaftarkan user')
+
+    },
+    login: async (req, res) => {
+        
+        const {username, password} = req.body
+
+        const user = await UserSchema.findOne({
+            username: {$regex: new RegExp("^" + username.toLowerCase() + "$", "i")}
+        })
+
+        if(!user) {
+            let messages = 'username tidak ditemukan'
+            
+            res.status(404).json({
+                result: 'error',
+                messages: messages
+            })
+
+            return logger(req, res, messages)
+        }
+
+        if(!await bcrypt.compare(password, user.password)) {
+            let messages = 'password salah'
+            
+            res.status(404).json({
+                result: 'error',
+                messages: messages
+            })
+
+            return logger(req, res, messages)
+        }
+
+        return jwt(req, res, user)
 
     }
 }
